@@ -1,0 +1,940 @@
+package ApplicationLogic;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.Random;
+
+import javax.swing.JDialog;
+import javax.swing.JScrollPane;
+import javax.swing.JTextArea;
+import javax.swing.ScrollPaneConstants;
+
+//import javax.swing.JDialog;
+//import javax.swing.JLabel;
+//import javax.swing.JTextArea;
+
+/**
+ * @author 
+ *
+ */
+public class Manager {
+
+	private Player podium[] = new Player[4];
+	private ArrayList<Player> players = new ArrayList<Player>();
+	private GameArea gameArea = GameArea.getInstance();
+	private Player currentPlayer = null;
+	private int diceValue = 0;
+	private int throwCount= 3;
+	private static Manager instance = null;
+	private boolean firstRound = false;
+	private boolean gameActive= false;
+	private boolean diceRolled = false;
+	private JDialog action= new JDialog();
+	private JTextArea text= new JTextArea();
+	JScrollPane pane;
+
+	
+	private Manager(){
+		Math.random();
+		pane= new JScrollPane(text); 
+		action.add(pane);
+		pane.setVerticalScrollBarPolicy(ScrollPaneConstants.VERTICAL_SCROLLBAR_ALWAYS);
+		action.setSize(300,600);
+		action.setVisible(true);
+	}
+	
+	public static Manager getInstance()
+	{
+		if (instance == null) 
+		{
+			instance = new Manager();
+		}
+		return instance;
+	}
+	
+	/**
+	 * returns the size of the gameGround array
+	 * @author ruben
+	 * @return
+	 */
+	public int fieldSize(){
+		return gameArea.fieldSize();
+	}
+	
+	/**
+	 * the method has two cases. 
+	 * (1) if a player is offered as parameter value it will check whether the specified player got some chips left
+	 * (2) if no player is specified the first case will be checked for all existing players
+	 * @param aPlayer
+	 * @return case 1: true if(aPlayer.chips.size <= 0) |case 2: true if(<three> players.chips <=0)
+	 */
+	public boolean checkEndGame(Player aPlayer) {
+		
+		if(aPlayer != null){
+			if(aPlayer.getChips().size() > 0)
+				return false;
+			else
+				return true;
+		}
+		else{
+			int finishedCounter= 0;
+			for(Player p:players)
+				if(p.getChips().size() <=0)
+					finishedCounter++;
+			
+			if(finishedCounter>=players.size()-1)
+				return true;
+			else 
+				return false;
+		}
+	}
+	
+	public Player getPlayerWithID(String IP){
+		Player p= null;
+		for(Player player: players){
+			if(player.getIP().equals(IP)){
+				p= player;
+				break;
+			}
+		}
+		
+		return p;
+	}
+	
+	public String getPlayerColor() {
+		int p = currentPlayer.getPlayerColor();
+		return p == 1 ? "green":(p == 2 ? "yellow" : (p == 3 ? "blue" : "red"));
+	}
+	
+	public String getPlayerIP() {
+		return currentPlayer.getIP();
+	}
+	
+	public boolean diceRolled() {
+		return diceRolled;
+	}
+	 
+	/**
+	 * sets the players on the podium. the first place is put into place 0 the second into place 1 and so on
+	 * @author ruben
+	 * @param p
+	 */
+	public void getOnPodium(Player p){
+		for(int i=0; i<podium.length; i++){
+			if(podium[i]== null || podium[i]==p){
+				podium[i]= p;
+				break;
+			}
+		}
+	}
+	
+	/**
+	 * resets all fields which are relevant ans used during the game and sets the references of the first player chips into the field
+	 */
+	public void startGame() {
+		podium[0]= podium[1]= podium[2]= podium[3]= null;
+		gameArea.reset();
+		
+		for(Player p: players){
+			for(Chip c: p.getChips()){
+				if(c.getStatus()==1){
+					gameArea.getField()[startForColor(c.getColor())]= c;
+				}
+				else if(c.getStatus()==2)
+					getMyStairs(p)[c.getPosition()]= c;					
+			}
+		}
+		Manager.getInstance().setGameActive(true);
+		//AMonitor terminal= new AMonitor();
+	}
+	
+	public void endGame(){
+		boolean end= false;
+		for(Player p: players){
+			for(int i=0; i<4; i++){
+				if(podium[i]==p)
+					break;
+				if(i==3 && podium[i]==null){
+					podium[i]= p;
+					end= true;
+				}
+			}
+			if(end==true)
+				break;
+		}
+		
+		setGameActive(false);
+		currentPlayer= getHost();
+		pasteInfo("\n\nGAME ENDED");
+	}
+	
+	public static String stringFColor(int color){
+		return color==1?"green":(color==2?"yellow":(color==3?"blue":"red"));
+	}
+	
+	public int startForColor(int color){
+		return color==1?0:(color==2?13:(color==3?26:39));
+	}
+	
+	public int endForColor(int color){
+		return color==1?50:(color==2?11:(color==3?24:37));
+	}
+	
+
+	 /**
+	  * 
+	  * @param IP
+	  * @param position
+	  * @author ruben
+	  * @author baris
+	  * @throws NoPermissionException
+	  * @throws FieldOccupiedException
+	  * @throws NotMovableException
+	  */
+	
+	public void manageGame(String IP, int position) throws NoPermissionException, FieldOccupiedException, NotMovableException {
+		
+		if (firstRound) {
+			currentPlayer.setLastDiceValue(diceValue);
+			
+			if (players.indexOf(currentPlayer) == players.size()-1) {
+				int highest = 0;
+//				int i=0;
+//				JDialog l= new JDialog();
+//				JTextArea l2= new JTextArea();
+//				l.add(l2);
+//				l.setVisible(true);
+//				l.setSize(30,30);
+				for (Player player: players) {
+//					l2.setText("Player "+(i++)+": "+player.getLastDiceValue());
+					if (player.getLastDiceValue() > highest) {
+						highest = player.getLastDiceValue();
+						currentPlayer = player;
+//						l2.setText(l2.getText()+"\n"+currentPlayer);
+					}
+				}
+				diceRolled = false;
+				firstRound = false;
+			}
+			
+			else {
+				diceRolled = false;
+				nextPlayer();
+			}
+		}
+		
+		else {
+		
+			if (!currentPlayer.getIP().equals(IP)) throw new NoPermissionException();
+					
+			if (position < 52) {
+				int theChip = currentPlayer.getChips().indexOf(gameArea.getField()[position]);
+				moveChip(diceValue, theChip);
+			}
+			else if (position > 100 && position < 116) { //GREEN
+				int theChip = currentPlayer.getChips().indexOf(getMyStairs(currentPlayer)[position - (100*currentPlayer.getPlayerColor()+1)]);
+				moveChip(diceValue, theChip);
+			}
+			
+			else if (position > 200 && position < 216) { //YELLOW
+				int theChip = currentPlayer.getChips().indexOf(getMyStairs(currentPlayer)[position - (100*currentPlayer.getPlayerColor()+1)]);
+				moveChip(diceValue, theChip);
+			}
+			
+			else if (position > 300 && position < 316) { //BLUE
+				int theChip = currentPlayer.getChips().indexOf(getMyStairs(currentPlayer)[position - (100*currentPlayer.getPlayerColor()+1)]);
+				moveChip(diceValue, theChip);
+			}
+			
+			else if (position > 400 && position < 416) { //RED
+				int theChip = currentPlayer.getChips().indexOf(getMyStairs(currentPlayer)[position - (100*currentPlayer.getPlayerColor()+1)]);
+				moveChip(diceValue, theChip);
+			}
+			
+			else {
+				
+				for(Chip c: currentPlayer.getChips()){
+					if(c.getStatus()==0){
+						moveChip(diceValue, currentPlayer.getChips().indexOf(c));
+						break;
+					}
+				}
+//				if((position > 1000 && position < 1005) || (position > 2000 && position < 2005) || (position > 3000 && position < 3005) || (position > 4000 && position < 4005)){
+//					 int theChip= position - (1000*currentPlayer.getPlayerColor()+1);
+//					 moveChip(diceValue, theChip);
+//				}
+				
+								
+			}
+			diceRolled = false;
+			
+			if(checkEndGame(currentPlayer)){
+				getOnPodium(currentPlayer);
+				if(checkEndGame(null)){
+					endGame();
+				}
+				else			
+					nextPlayer();
+				pasteInfo(Arrays.toString(podium));
+			}
+			else			
+				nextPlayer();
+			
+		}
+		
+
+	}
+	
+	public void nextPlayer() { // COULD BE INTEGRATED INTO MANAGEGAME
+		if(gameActive!=false){
+			if (currentPlayer.getChips().size()==0 || diceValue != 6){
+				do{
+					currentPlayer = players.get((players.indexOf(currentPlayer)+1) % players.size());
+				}
+				while(currentPlayer.getChips().size()==0);
+			}
+			
+			if(!currentPlayer.isHuman()){
+				KI(/*diceValue,*/ true);
+			}
+		}
+	}
+	/*//PREVERSION
+		public void nextPlayer() { // COULD BE INTEGRATED INTO MANAGEGAME
+		if (diceValue != 6)
+			currentPlayer = players.get((players.indexOf(currentPlayer)+1) % players.size());
+	}
+	*/
+	
+	/**
+	 * @throws NoPermissionException 
+	 * 
+	 */
+	public void insertPlayer(String IP, String name, boolean isHuman) throws NoPermissionException {
+		Player player = new Player();
+		player.setPlayerName(name);
+		
+		for (Player checkPlayer : players) {
+			if (checkPlayer.getIP().equals(IP)) throw new NoPermissionException();
+		}
+		
+		player.setIP(IP);
+		player.setHuman(isHuman);
+		
+/*		if (players.size() == 0) {
+			player.setPlayerColor((int)(1 + Math.random()*3));
+		}*/
+		
+		int count = 1;
+		while(playerWithColor(count)!=null) count++;
+		player.setPlayerColor(count);
+		
+		
+		switch(player.getPlayerColor()) {
+			case 1:
+				player.setStartPosition(0);
+				player.setEndPosition(50);
+				break;
+			case 2:
+				player.setStartPosition(13);
+				player.setEndPosition(11);
+				break;
+			case 3:
+				player.setStartPosition(26);
+				player.setEndPosition(24);
+				break;
+			case 4:
+				player.setStartPosition(39);
+				player.setEndPosition(37);
+				break;
+		}
+
+		for (int i = 0; i < 4; i++) {
+			Chip chip = new Chip(player.getPlayerColor());			
+			chip.setStatus(i==0? 1:0);
+			chip.setPosition(i==0? player.getStartPosition(): -1);
+//			chip.setStatus(0);
+//			chip.setPosition(-1);
+			player.getChips().add(chip);
+		}
+		
+		players.add(player);
+		player.setHost(players.indexOf(player) == 0? true: false);
+		if(players.indexOf(player)==0){
+//			player.getChips().remove(3);
+//			player.getChips().remove(2);
+//			player.getChips().remove(1);
+//			player.getChips().get(0).setStatus(2);
+//			player.getChips().get(0).setPosition(0);
+			currentPlayer = player;
+		}
+	}
+	
+	
+	/**
+	 * @param player
+	 * @return
+	 */
+	public Player selectPlayer(int player) {
+		return players.get(player);
+		
+	}
+	
+	
+	/**
+	 * @return
+	 * @throws NoPermissionException 
+	 */
+	public int rollDice(String IP) throws NoPermissionException {
+		if (!currentPlayer.getIP().equals(IP)) throw new NoPermissionException();
+		diceValue = 1 + (int)(Math.random() * 6);
+		currentPlayer.setLastDiceValue(diceValue);
+		pasteInfo("\n\n"+currentPlayer.getPlayerName()+" rolled a "+diceValue);
+		diceRolled = true;
+		
+		if(!playerCanMakeAction() && --throwCount==0){
+			nextPlayer();
+			diceRolled = false;
+			throwCount= 3;
+		}
+		else if(playerCanMakeAction()){
+			throwCount= 3;
+		}
+		else if(throwCount!=3)
+			diceRolled= false;
+		
+		return diceValue;	
+	}
+	
+	private boolean playerCanMakeAction(){
+		int notMovable= 0;
+		ArrayList<Chip>onStairs= new ArrayList<Chip>();
+		for(Chip chip: currentPlayer.getChips()){
+			switch(chip.getStatus()){
+			case 0:
+				notMovable++;
+				break;
+			case 1:
+				return true;
+				//break;
+			case 2:
+				onStairs.add(chip);
+				break;
+			}
+		}
+		
+		if(diceValue!= 6 && notMovable==currentPlayer.getChips().size())
+			return false;
+		else if(diceValue==6 && notMovable==currentPlayer.getChips().size())
+			return true;
+		
+		for(Chip chip: onStairs){
+			if(currentPlayer.getChips().indexOf(chip)+diceValue <= getMyStairs(currentPlayer).length)
+				return true;
+		}
+		
+		return false;
+		
+	}
+	
+	/**
+	 * moves an chip and handles all routines connected to this action. an chip which wasn't on the field already can be set to the players startfield
+	 * if it isn't blocked by an same colored chip. in that case the value an exception is invoked
+	 * @author ruben
+	 * @param value
+	 * @param chip
+	 * @throws FieldOccupiedException a nonactive chip should be placed on the startfield while an friendly chip is already placed there
+	 * @throws NotMovableException at attempt to set an nonactive chip on the field while value isn't 6
+	 */
+	public void moveChip(int value, int chip) throws FieldOccupiedException, NotMovableException{
+		throwCount= 3;
+		
+		Chip currChip= currentPlayer.getChips().get(chip);
+		Chip gameField[]= gameArea.getField();
+		int startPos= currentPlayer.getStartPosition();
+		int endPos= currentPlayer.getEndPosition();
+		//52 felder
+		int newPosition= currChip.getPosition()+value;
+		
+		if(currChip.getStatus() == 0){
+		//stone wasn't on the field before, so it will be checked if there is a chip on the players startfield. if there is already a chip of the 
+		//same color permission will be denied, if there is one of an other color, it will be kicked
+			if(value!=6)
+				throw new NotMovableException();
+				
+			if(gameField[startPos]!= null){
+				
+				if(gameField[startPos].getColor()==currentPlayer.getPlayerColor())
+					throw new FieldOccupiedException();
+				
+				kickChip(gameField[startPos]);
+			}
+
+			gameField[startPos]= currChip;
+			currChip.setPosition(startPos);
+			currChip.setStatus(1);
+		}
+		else if(currChip.getStatus() == 1){
+			//*1			
+			
+			if(currChip.getPosition() <= endPos && newPosition > endPos){
+			//the chip was already on the field..
+				
+				if(newPosition - endPos < 6){
+					//.. and will enter the players home stairs 
+					
+					if(getMyStairs(currentPlayer)[(newPosition - endPos)-1]!= null){
+						mergeChips(currentPlayer.getChips().indexOf(getMyStairs(currentPlayer)[(newPosition - endPos)-1]), currentPlayer.getChips().indexOf(currChip));
+					}
+					else{
+						gameField[currChip.getPosition()]= null;
+						currChip.setPosition((newPosition - endPos)-1);
+						getMyStairs(currentPlayer)[(newPosition - endPos)-1]= currChip;
+						currChip.setStatus(2);
+						currChip.setStepCounter(currChip.getStepCounter()+value);
+					}
+				}
+				else{
+					//.. get in homespace and get removed from game	
+						gameField[currChip.getPosition()]= null;
+						finishChip(currentPlayer.getChips().indexOf(currChip));
+					}
+			}
+			else{
+			//.. and will stay on the mainfield
+				
+				newPosition %= fieldSize();
+				if(gameField[newPosition]!=null){
+					if(gameField[newPosition].getColor()==currentPlayer.getPlayerColor()){
+						mergeChips(currentPlayer.getChips().indexOf(gameField[newPosition]), currentPlayer.getChips().indexOf(currChip));
+					}
+					else{
+						kickChip(gameField[newPosition]);
+						gameField[currChip.getPosition()]= null;
+						gameField[newPosition]= currChip;
+						currChip.setPosition(newPosition);
+						currChip.setStepCounter(currChip.getStepCounter()+value);
+					}
+				}
+				else{
+					gameField[currChip.getPosition()]= null;
+					gameField[newPosition]= currChip;
+					currChip.setPosition(newPosition);
+					currChip.setStepCounter(currChip.getStepCounter()+value);
+				}
+			}			
+		}
+		else if(currChip.getStatus() == 2){
+		//the chip was already removed from mainfield and remained on the players home stairs
+			
+			if(newPosition == 5){
+				getMyStairs(currentPlayer)[currChip.getPosition()]= null;
+				finishChip(currentPlayer.getChips().indexOf(currChip));
+			}
+			else if(newPosition < 5){
+				if(getMyStairs(currentPlayer)[newPosition]!= null){
+					mergeChips(currentPlayer.getChips().indexOf(getMyStairs(currentPlayer)[newPosition]), currentPlayer.getChips().indexOf(currChip));
+				}
+				else{
+					getMyStairs(currentPlayer)[currChip.getPosition()]= null;
+					getMyStairs(currentPlayer)[newPosition]= currChip;
+					currChip.setPosition(newPosition);
+					currChip.setStepCounter(currChip.getStepCounter()+value);
+				}
+			}
+		}
+		
+	}
+	
+	/**
+	 * invokes a new thread which will calculate the choices for the non-human players. therefore it references the current user. if the current user
+	 * is human the attempt won't result in any changes
+	 * @author ruben
+	 * @param rolledV the value which results in the throw of the dice (number from 1 till' 6)
+	 * @param started indicates if the thread should start before it is returned
+	 */
+	public Thread KI(/*final int rolledV,*/ final boolean started) {
+
+		Runnable z = new Runnable() {
+
+			public void run() {
+			
+				Random r= new Random();
+				
+				do{
+						if(currentPlayer.getChips().size()!=0){
+							
+							do{
+								diceValue= r.nextInt(6)+1;
+								currentPlayer.setLastDiceValue(diceValue);
+								pasteInfo("\n\n"+currentPlayer.getPlayerName()+"("+stringFColor(currentPlayer.getPlayerColor())+ ") rolled a "+diceValue+" and \n");
+								if(playerCanMakeAction()){
+									innerKI();
+									if(checkEndGame(currentPlayer)){
+										getOnPodium(currentPlayer);
+										if(checkEndGame(null)){
+											endGame();
+										}
+									}
+								}
+								else{
+									throwCount--;
+									if(throwCount==0)
+										throwCount=3;
+								}
+							}
+							while(currentPlayer.getChips().size()!=0 && (diceValue==6 || throwCount!=3));
+							
+						}
+						if(gameActive==false)
+							break;
+						currentPlayer = players.get((players.indexOf(currentPlayer)+1) % players.size());
+				}
+				while((!currentPlayer.isHuman())||(currentPlayer.isHuman() && currentPlayer.getChips().size()==0));
+				
+			}
+			/*//PREVERSION
+				public void run() {
+					if(!currentPlayer.isHuman() && currentPlayer.getChips().size()>0)
+						innerKI();
+				}
+			 */
+
+			private synchronized void innerKI() {
+				int waitMillisecs= 1000;
+				
+				try {
+					wait(waitMillisecs);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+
+				int something = moveOrSuspend(/*rolledV*/diceValue);
+				int kick = checkKick(/*rolledV*/diceValue);
+				int merge = checkMerge(/*rolledV*/diceValue);
+				int home = checkGoHome(/*rolledV*/diceValue);
+
+				try {
+					if (kick != -1) {
+						pasteInfo("kicked a chip");
+						moveChip(/*rolledV*/diceValue, kick);
+					} else if (merge != -1) {
+						pasteInfo("merged his chips");
+						moveChip(/*rolledV*/diceValue, merge);
+					} else if (home != -1) {
+						pasteInfo("got a chip into goal");
+						moveChip(/*rolledV*/diceValue, home);
+					} else if (something != -1) {
+						moveChip(/*rolledV*/diceValue, something);
+					}
+
+				} catch (NumberFormatException e) {
+					e.printStackTrace();
+				} catch (FieldOccupiedException e) {
+					pasteInfo("\n\nUnerlaubten Zug unterbunden");
+				} catch (NotMovableException e) {
+					pasteInfo("\n\nUnerlaubten Zug unterbunden");
+				}
+
+				try {
+					wait(waitMillisecs);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				
+				if (currentPlayer.getChips().size() <= 0)
+					getOnPodium(currentPlayer);
+
+			}
+
+			private int checkKick(int value) {
+				if (gameArea.getField()[currentPlayer.getStartPosition()] != null
+						&& gameArea.getField()[currentPlayer.getStartPosition()]
+								.getColor() != currentPlayer.getPlayerColor()) {
+					for (Chip chip : currentPlayer.getChips()) {
+						if (chip.getStatus() == 0 && value == 6)
+							return currentPlayer.getChips().indexOf(chip);
+
+					}
+				}
+
+				for (Chip chip : currentPlayer.getChips()) {
+					if (chip.getStatus() == 1
+							&& gameArea.getField()[(chip.getPosition() + value)
+									% fieldSize()] != null
+							&& gameArea.getField()[(chip.getPosition() + value)
+									% fieldSize()].getColor() != currentPlayer
+									.getPlayerColor()) {
+						if ((chip.getPosition() < currentPlayer
+								.getEndPosition() ? (chip.getPosition() + value
+								% fieldSize() < currentPlayer.getEndPosition())
+								: true))
+							return currentPlayer.getChips().indexOf(chip);
+					}
+
+				}
+
+				return -1;
+			}
+
+			private int checkMerge(int value) {
+				for (Chip chip : currentPlayer.getChips()) {
+					for (Chip chip2 : currentPlayer.getChips()) {
+						if (chip.getStatus() == 1
+								&& (chip.getPosition() + value) % fieldSize() == chip2
+										.getPosition()) {
+							if ((chip.getPosition() < currentPlayer
+									.getEndPosition() ? (chip.getPosition()
+									+ value % fieldSize() < currentPlayer
+									.getEndPosition()) : true))
+								return currentPlayer.getChips().indexOf(chip);
+						}
+					}
+
+				}
+				return -1;
+			}
+
+			private int checkGoHome(int value) {
+				for (Chip chip : currentPlayer.getChips()) {
+					if (chip.getStatus() == 1
+							&& chip.getPosition() <= currentPlayer
+									.getEndPosition()
+							&& chip.getPosition() + value > currentPlayer
+									.getEndPosition())
+						return currentPlayer.getChips().indexOf(chip);
+					if (chip.getStatus() == 2
+							&& chip.getPosition() + value <= 5) {
+						return currentPlayer.getChips().indexOf(chip);
+					}
+				}
+				return -1;
+			}
+
+			private int moveOrSuspend(int value) {
+				ArrayList<Chip> onField = new ArrayList<Chip>();
+				
+				if (value == 6) {
+					for (Chip chip : currentPlayer.getChips()) {
+						if (chip.getStatus() == 0
+								&& (gameArea.getField()[currentPlayer
+										.getStartPosition()] == null ? true
+										: gameArea.getField()[currentPlayer
+												.getStartPosition()].getColor() != currentPlayer
+												.getPlayerColor())) {
+							pasteInfo("moved a chip out of home");
+							return currentPlayer.getChips().indexOf(chip);
+						}
+					}
+				}
+
+				for (Chip chip : currentPlayer.getChips()) {
+					if (chip.getStatus() == 1) {
+						onField.add(chip);
+					}
+				}
+				if (onField.size() != 0) {
+					Random r = new Random();
+					pasteInfo("moved a chip ");
+					return currentPlayer.getChips().indexOf(onField.get(r.nextInt(onField.size())));
+				}
+
+				return -1;
+			}
+
+		};
+
+		Thread x = new Thread(z);
+
+		if (started)
+			x.start();
+
+		return x;
+	}
+	
+	
+	/**
+	 * merges two chips of one color. usually used if a moved chip gets on an field occupied from an same colored chip
+	 * @author ruben
+	 * @param chip
+	 * @param chip2
+	 */
+	public void mergeChips(int chip, int chip2) {
+		switch(currentPlayer.getChips().get(chip2).getStatus()){
+		case 1:
+			gameArea.getField()[currentPlayer.getChips().get(chip2).getPosition()] = null;			
+			break;
+		case 2:
+			getMyStairs(currentPlayer)[currentPlayer.getChips().get(chip2).getPosition()]= null;
+			break;		
+		}
+		currentPlayer.getChips().get(chip).setMergeCount(currentPlayer.getChips().get(chip).getMergeCount()+(currentPlayer.getChips().get(chip2).getMergeCount()+1));
+		currentPlayer.getChips().remove(chip2);
+	}
+	
+	
+	/**
+	 * kicks an foe's chip from the mainfield
+	 * @author baris, ruben
+	 * @param chip
+	 */
+	public void kickChip(Chip chip){
+		gameArea.getField()[chip.getPosition()] = null;
+		chip.setPosition(-1);
+		chip.setStepCounter(0);
+		chip.setStatus(0);
+	}
+	
+	
+	/**
+	 * removes an chip which has reached the goal from the field
+	 * @param chip
+	 */
+	public void finishChip(int chip) {
+		currentPlayer.getChips().remove(chip);
+	}
+	
+	
+	/**
+	 * @deprecated
+	 * @param chip
+	 */
+	public void sendHome(int chip) {
+		
+	}
+	
+	/**
+	 * returns the playerobject with the specified color
+	 * @author ruben
+	 * @param color
+	 * @return
+	 */
+	public Player playerWithColor(int color){
+		
+		for(Player player:players){
+			if(player.getPlayerColor()==color)
+				return player;
+		}
+		
+		return null;
+	}
+	
+	/**
+	 * returns the end-stairs chip array depending on the players color. colors from 0 - 3
+	 * @author ruben
+	 * @return 
+	 */
+	public Chip[] getMyStairs(Player p){
+		Chip[] playerStairs= null;
+		
+		switch(p.getPlayerColor()){
+		case 4:
+			playerStairs= gameArea.getRedEnd();
+			break;
+		case 3:
+			playerStairs= gameArea.getBlueEnd();
+			break;
+		case 2:
+			playerStairs= gameArea.getYellowEnd();
+			break;
+		case 1:
+			playerStairs= gameArea.getGreenEnd();
+			break;
+		}
+		
+		return playerStairs;
+	}
+	
+	
+	public boolean gotInactiveChips(Player player){
+		for(Chip chip: currentPlayer.getChips()){
+			if(chip.getStatus()==0)
+				return true;
+		}
+		return false;	
+	}
+	
+	public boolean gotActiveChips(Player player){
+		for(Chip chip: currentPlayer.getChips()){
+			if(chip.getStatus()==1 || chip.getStatus()==2)
+				return true;
+		}
+		return false;	
+	}
+	
+	public Player getCurrentPlayer() {
+		return currentPlayer;
+	}
+	
+	public void setCurrentPlayer(String currentIp, String currentPlayer) {
+		Iterator<Player> playerIt = players.iterator();
+		while(playerIt.hasNext()){
+			Player actualPlayer = playerIt.next(); 
+			if(actualPlayer.getIP().equals(currentIp)){
+				actualPlayer.setPlayerName(currentPlayer);
+			}
+		}
+	}
+
+	public ArrayList<Player> getPlayers() {
+		return players;
+	}
+	
+	public boolean isGameActive() {
+		return gameActive;
+	}
+
+	public void setGameActive(boolean gameActive) {
+		this.gameActive = gameActive;
+	}
+
+	public int getDiceValue() {
+		return diceValue;
+	}
+	
+	public Player getHost(){
+		for(Player pl: players){
+			if(pl.isHost()){
+				return pl;
+			}
+		}
+		return null;
+	}
+	
+	public boolean isHost(String IP){
+		for(Player p: players){
+			if(p.getIP().equals(IP) && p.isHost()){
+				return true;
+			}
+		}
+		return false;
+	}
+	
+	public boolean isCurrentPlayer(String IP){
+		if(currentPlayer.getIP().equals(IP))
+			return true;
+		else 
+			return false;
+	}
+	
+	public Player[] getPodium(){
+		return podium;
+	}
+	
+	private void pasteInfo(String s){
+		text.setText(text.getText()+s);
+		if(action.isVisible()==false)
+			action.setVisible(true);
+		pane.setAutoscrolls(true);
+		
+	}
+	
+	/**
+	 * Von Sebastian hinzugefügt:
+	 */
+	public String getTextArea(){
+		return text.getText().toString();
+	}
+}
+

@@ -1,0 +1,23 @@
+Ludo ist ein Gesellschaftsspiel für zwei bis vier Spieler. 
+Das Ziel des Spieles besteht darin, als erstes die vier eigenen Spielfiguren durch Würfeln von den Startfeldern 
+ins Zielfeld (home) zu ziehen. Dazu müssen die Figuren das Spielfeld einmal umrunden. 
+
+Spielstart
+Jeder Spieler erhält 4 Figuren einer Farbe. 3 Figuren werden auf das gleichfarbige Viereck gesetzt und eine 
+auf das davor liegende Startfeld. 
+Um den Beginner zu ermitteln wird reihum gewürfelt. Der Spieler, der die höchste Augenzahl würfel beginnt.
+
+Spielablauf
+Der Spieler, der an der Reihe ist würfelt und zieht entsprechend der Augenzahl eine seiner Spielfiguren, die auf dem Spielfeld sind
+im Uhrzeigersinn weiter. Wer eine 6 würfelt darf nochmals würfeln. 
+Bei einer 6 darf der Spieler (muss aber nicht) eine seiner Figuren, die noch im Start-Viereck stehen,
+auf das Startfeld stellen. 
+Es darf nur ein Spielstein auf einem Feld stehen.
+Trifft eine Figur auf ein bereits besetztes Feld, so wird die gegnerische Figur geschlagen und muss in ihr Viereck zurück.
+Sollte eine eigene Figur das Feld besetzen, so vereinigen sich die beiden Figuren zu einer einzelnen.
+
+Reihum würfelt nun jeder Spieler und zieht seine Spielfiguren entsprechend weiter.
+
+Spielziel
+Gewinner ist der, der zuerst alle seine Figuren auf das Zielfeld gezogen hat.
+Dabei muss mit einem genauem Wurf auf das Zielfeld gezogen werden.

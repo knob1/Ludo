@@ -1,0 +1,14 @@
+07/03/2012
+
+- ein Spieler kann mit der Wurf der vorigen Runde ziehen (IS BEHOBEN?)
++ im Konstruktor von Manager muss einmal gewürfelt werden, damit der erste Wurf nicht immer eine 6 ist.
+- zu lange Spielernamen
+- wenn ein Spieler keine Aktion machen, wechselt das Spiel nicht zum nächsten Spieler
+
+
+
+07/04/2012
+- der "Spiel Starten"-Button ist immer noch beim ersten Spieler ohne weitere Mitspielen zu sehen
+
+07/09/2012
+-der endscreen wird nach beenden des speils nicht aufgerufen

@@ -1,0 +1,320 @@
+/**
+ * 
+ */
+package ApplicationLogic;
+
+/**
+ * @author Sebastian Römer
+ * @author Christoph Otto
+ */
+import java.io.*;
+import java.net.*;
+import java.util.*;
+
+public class HTTPServer extends Thread {
+	Socket connectedClient = null;
+	BufferedReader inFromClient = null;
+	DataOutputStream outToClient = null;
+	
+	static String playerIp = null;
+	
+	public HTTPServer(Socket client)
+	{
+		connectedClient = client;
+	}
+
+	public void run()
+	{
+		System.out.println("Thread with ID " + getId());
+		
+		String beforeQm = null;
+		String afterQm = null;
+		String beforeEq = null;
+		String afterEq1 = null;
+		String username = null;
+		String eqSub0; //Chip Color
+		String eqSub1; //Chip Color Value
+		String eqSub2; //ChipId
+		String eqSub3; //ChipId Value
+		String eqSub4; //divID
+		String eqSub5; //divID Value
+		
+		try
+		{
+			System.out.println("The Client " + connectedClient.getInetAddress() + ":" + connectedClient.getPort() + " is connected");
+			
+			inFromClient = new BufferedReader(new InputStreamReader(connectedClient.getInputStream()));
+			outToClient = new DataOutputStream(connectedClient.getOutputStream());
+			
+			//String currentIp = connectedClient.getInetAddress().toString();
+			//currentIp = currentIp.substring(1, currentIp.length());
+			int counter = 1 + (int)(Math.random() * 12);
+			String currentIp = Integer.toString(counter); 
+			
+			System.out.println("------------>"+currentIp);
+			
+			String requestString = inFromClient.readLine();
+			String headerLine = requestString; // example: GET / HTTP/1.1
+
+			StringTokenizer tokenizer = new StringTokenizer(headerLine);
+			String httpMethod = tokenizer.nextToken();
+			String httpQueryString = tokenizer.nextToken();
+			
+			//moveChip?Color=red&ChipID=1&divId=f1001&x=10&y=17
+			
+			if(httpMethod.equals("GET")){
+				if(httpQueryString.contains("moveChip")){
+					String[] qmSub = httpQueryString.split("\\?");
+					beforeQm = qmSub[0];
+					afterQm = qmSub[1];
+					System.out.println("---afterQM---->"+afterQm);
+					String[] inputForm = afterQm.split("\\&");
+					String sub0 = inputForm[0];
+					String sub1 = inputForm[1];
+					String sub2 = inputForm[2];
+					String[] eqSub_1 = sub0.split("\\=");
+					eqSub0 = eqSub_1[0]; // Color
+					eqSub1 = eqSub_1[1]; // bsp: red
+					String[] eqSub_2 = sub1.split("\\=");
+					eqSub2 = eqSub_2[0]; // ChipId
+					eqSub3 = eqSub_2[1]; // bsp: 1
+					String[] eqSub_3 = sub1.split("\\=");
+					eqSub4 = eqSub_3[0]; // divId
+					eqSub5 = eqSub_3[1]; // bsp: f1001
+					
+					sendResponse(200, HTMLSites.getInstance().moveChipToDiv("", Integer.parseInt(eqSub3), eqSub1),false);
+				}
+			}
+			
+			if(httpQueryString.contains("?"))
+			{
+				String[] qmSub = httpQueryString.split("\\?");
+				beforeQm = qmSub[0];
+				afterQm = qmSub[1];
+				
+				String[] inputForm = afterQm.split("\\=");
+				beforeEq = inputForm[0];
+				afterEq1 = inputForm[1];
+				
+				if(httpQueryString.contains("&"))
+				{
+					String[] usernameArray = inputForm[1].split("\\&");
+					username = usernameArray[1];
+				}
+			}
+
+			StringBuffer responseBuffer = new StringBuffer();
+
+			System.out.println("The HTTP request string is ....");
+			
+			while(inFromClient.ready())
+			{
+				responseBuffer.append(requestString + "<BR>");
+				System.out.println(requestString);
+				requestString = inFromClient.readLine();
+			}
+			
+			System.out.println("received query:" + httpQueryString);
+			
+			if(httpMethod.equals("GET"))
+			{
+				if(httpQueryString.equals("/"))
+				{
+					sendResponse(200, HTMLSites.getInstance().getIndexHtml(), false);
+				}
+				
+				else if(httpQueryString.toLowerCase().contains("form_action"))
+				{
+					int size = Manager.getInstance().getPlayers().size();
+					if(size<=4){
+						String [] p;
+						boolean bHost = false;
+						Player host = Manager.getInstance().getPlayerWithID(currentIp);
+						
+						if(host != null)
+						{
+							bHost = host.isHost();
+						}
+						
+						if(size>=2 && bHost){
+							p = getPlayerArray(Manager.getInstance().getPlayers());
+							sendResponse(200, HTMLSites.getInstance().createLandingPage(p[0], p[1], p[2], p[3], true), false);
+						}
+						else
+						{
+							try
+							{
+								Manager.getInstance().insertPlayer(currentIp, afterEq1);
+								p = getPlayerArray(Manager.getInstance().getPlayers());
+								sendResponse(200, HTMLSites.getInstance().createLandingPage(p[0], p[1], p[2], p[3], false), false);
+							}
+							catch(Exception e){
+								// Index HTML modifizieren -> Flag 
+							}
+						}
+					}
+					else{
+						// Seite bauen: Kein weiterer Spieler möglich
+					}
+					
+					
+				}
+
+				else if(httpQueryString.toLowerCase().contains("random"))
+				{
+					sendResponse(200, "", false);
+				}
+				
+				else if(httpQueryString.toLowerCase().contains("start_game"))
+				{
+					HTMLSites.getInstance().createLudoBoard();
+					sendResponse(200, HTMLSites.getInstance().init(), false);
+				}
+				
+				else if(httpQueryString.toLowerCase().contains("move"))
+				{
+		  	  		String[] qmSub = httpQueryString.split("\\?");
+		  	  		beforeQm		= qmSub[0];
+		  	  		afterQm			= qmSub[1];
+		  	  		char cid = afterQm.charAt(0);
+		  	  		String id = Character.toString(cid);
+			  			//sendResponse(200, HTMLSites.getInstance().moveChipToDiv("f42", 1, "red"),false);
+			  	}
+				else
+				{
+					String fileName = "bin/files" + httpQueryString;
+					fileName = URLDecoder.decode(fileName);
+					
+					if(new File(fileName).isFile())
+					{
+						sendResponse(200, fileName, true);
+					}
+					else
+					{
+						sendResponse(404, "<b>The Requested resource not found .... Usage: http://127.0.0.1:5000 or http://127.0.0.1:5000/</b>", false);
+					}
+				}
+			}
+			else
+			{
+				sendResponse(404, "<b>The Requested resource not found .... Usage is: http://127.0.0.1:5000 or http://127.0.0.1:5000/</b>", false);
+			}
+		}
+		catch(Exception e)
+		{
+			e.printStackTrace();
+		}
+	}
+
+	private String[] getPlayerArray(ArrayList<Player> players) {
+		String[] p = new String[4];
+        
+        Iterator<Player> players_itr = players.iterator();
+        
+        for(int i=0; i<4; i++)
+        {
+            if(players_itr.hasNext())
+            {
+                p[i] = players_itr.next().getPlayerName();
+            }
+            else
+            {
+                p[i] = "";
+            }
+        }
+		return p;
+	}
+
+	public void sendResponse(int statusCode, String responseString, boolean isFile) throws Exception
+	{
+		String statusLine = null;
+		String contentLengthLine = null;
+		String contentTypeLine = "Content-Type: text/html \r\n";
+		
+		String fileName = null;
+		FileInputStream fin = null;
+
+		// prepare statusLine
+		if(statusCode == 200)
+		{
+			statusLine = "HTTP/1.1 200 OK \r\n";
+		}
+		else
+		{
+			statusLine = "HTTP/1.1 404 Not Found \r\n";
+		}
+		
+		// prepare answer
+		if(isFile)
+		{
+			fileName = responseString;
+			fin = new FileInputStream(fileName);
+			contentLengthLine = "Content-Length: " + Integer.toString(fin.available()) + "\r\n";
+            
+            if(!fileName.endsWith(".htm") && !fileName.endsWith(".html"))
+            {
+            	contentTypeLine = "Content-Type: \r\n";
+            }
+        }
+        else
+        {
+            responseString = HTMLSites.getInstance().getHtmlStart() + responseString + HTMLSites.getInstance().getHtmlEnd();
+            contentLengthLine = "Content-Length: " + responseString.length() + "\r\n";
+        } 
+
+		outToClient.writeBytes(statusLine);
+		outToClient.writeBytes(contentTypeLine);
+		outToClient.writeBytes(contentLengthLine);
+		outToClient.writeBytes("Connection: close\r\n");
+		outToClient.writeBytes("\r\n");
+		
+		if(isFile)
+		{
+			sendFile(fin, outToClient);
+		}
+		else
+		{
+			outToClient.writeBytes(responseString);
+		}
+		
+		outToClient.close();
+	}
+	
+	
+	/**
+	 * @param fin
+	 * @param out
+	 * @throws Exception
+	 */
+	public void sendFile(FileInputStream fin, DataOutputStream out) throws Exception
+	{
+		byte[] buffer = new byte[1024];
+		int bytesRead;
+
+		while((bytesRead = fin.read(buffer)) != -1)
+		{
+			out.write(buffer, 0, bytesRead);
+		}
+		
+		fin.close();
+    }
+
+	
+	/**
+	 * @param args
+	 */
+	public static void main(String args[]) throws Exception
+	{
+		int port = 8000;
+		
+		ServerSocket Server = new ServerSocket(port, 10, InetAddress.getByName("192.168.0.115"));
+		System.out.println("TCPServer Waiting for client on port " + port);
+		divManager.getInstance().createEmptyLudoBoard();
+		while(true)
+		{
+			Socket connected = Server.accept();
+			(new HTTPServer(connected)).start();
+		}
+	}
+
+}

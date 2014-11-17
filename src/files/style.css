@@ -1,0 +1,927 @@
+a:link{
+        color: #000000;
+        text-decoration: underline;
+}
+a:visited, focus, active {
+        color: #000000;
+        text-decoration: none;
+}
+a:hover {
+        color: #a24112;
+        text-decoration: none;
+}
+#manual {
+		position: absolute;
+		margin-top: 150px;
+		margin-left: 11px;
+}
+#wrapper {
+		background-image:url(mainbg.jpg);
+		background-size: 100%;
+		width: 1257px;
+		height: 890px;
+		margin-left: auto;
+		margin-right: auto; 
+		text-align: center;
+}
+
+#main{
+        width: 600px;
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+}
+
+#dice {
+		margin-top: 170px;
+		height: 75px;
+		width: 73px;
+		margin-left: 150px;
+}
+#one {
+        float: left;
+}
+#two {
+        float: left;
+}
+#three {
+        float:left;
+}
+#four {
+        float: left;
+}
+#board_main {
+        margin-left: auto;
+        margin-right: auto;
+        text-align: center;
+}
+#left_pane {
+        height: 800px;
+        float: left;
+        width: 245px;
+}
+#right_pane {
+        float: left;
+        height: 800px;
+        width: 800px;
+        background-image:url(ludoboard.jpg);
+        background-size: 100%;
+        margin-top: 56px;
+		margin-left: 98px;
+}
+#f50{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 374px;
+        margin-top: 5px;
+        height: 47px;
+        width: 47px;
+}
+#f51{
+        position: absolute;
+		padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 425px;
+        margin-top: 5px;
+        height: 47px;
+        width: 47px;
+}
+#f0{
+        position: absolute;
+		padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 425px;
+        margin-top: 58px;
+        height: 47px;
+        width: 47px;
+}
+#f1{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 425px;
+        margin-top: 110px;
+        height: 47px;
+        width: 47px;
+}
+#f2{
+        position: absolute;
+		padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 426px;
+        margin-top: 164px;
+        height: 47px;
+        width: 47px;
+}
+#f3{
+        position: absolute;
+		padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 426px;
+        margin-top: 217px;
+        height: 47px;
+        width: 47px;
+}
+#f4{
+        position: absolute;
+		padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 426px;
+        margin-top: 270px;
+        height: 47px;
+        width: 47px;
+}
+#f5{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 479px;
+        margin-top: 325px;
+        height: 47px;
+        width: 47px;
+}
+#f6{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 533px;
+        margin-top: 325px;
+        height: 47px;
+        width: 47px;
+}
+#f7{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 586px;
+        margin-top: 325px;
+        height: 47px;
+        width: 47px;
+}
+#f8{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 640px;
+        margin-top: 325px;
+        height: 47px;
+        width: 47px;
+}
+#f9{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 693px;
+        margin-top: 325px;
+        height: 47px;
+        width: 47px;
+}
+#f10{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 746px;
+        margin-top: 325px;
+        height: 47px;
+        width: 47px;
+}
+#f11{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 746px;
+        margin-top: 377px;
+        height: 47px;
+        width: 47px;
+}
+#f12{
+        position: absolute;
+        margin-left: 747px;
+        margin-top: 428px;
+        height: 47px;
+        width: 47px;
+}
+#f13{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 693px;
+        margin-top: 428px;
+        height: 47px;
+        width: 47px;
+}
+#f14{
+        position: absolute;
+        margin-left: 639px;
+        margin-top: 428px;
+        height: 47px;
+        width: 47px;
+}
+#f15{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 587px;
+        margin-top: 428px;
+        height: 47px;
+        width: 47px;
+}
+#f16{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 533px;
+        margin-top: 428px;
+        height: 47px;
+        width: 47px;
+}
+#f17{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 480px;
+        margin-top: 428px;
+        height: 47px;
+        width: 47px;
+}
+#f18{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 426px;
+        margin-top: 483px;
+        height: 47px;
+        width: 47px;
+}
+#f19{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 426px;
+        margin-top: 536px;
+        height: 47px;
+        width: 47px;
+}
+#f20{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 426px;
+        margin-top: 588px;
+        height: 47px;
+        width: 47px;
+}
+#f21{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 426px;
+        margin-top: 641px;
+        height: 47px;
+        width: 47px;
+}
+#f22{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 426px;
+        margin-top: 694px;
+        height: 47px;
+        width: 47px;
+}
+#f23{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 426px;
+        margin-top: 748px;
+        height: 47px;
+        width: 47px;
+}
+#f24{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 375px;
+        margin-top: 748px;
+        height: 47px;
+        width: 47px;
+}
+#f25{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 323px;
+        margin-top: 748px;
+        height: 47px;
+        width: 47px;
+}
+#f26{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 323px;
+        margin-top: 694px;
+        height: 47px;
+        width: 47px;
+}
+#f27{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 323px;
+        margin-top: 641px;
+        height: 47px;
+        width: 47px;
+}
+#f28{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 323px;
+        margin-top: 588px;
+        height: 47px;
+        width: 47px;
+}
+#f29{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 323px;
+        margin-top: 536px;
+        height: 47px;
+        width: 47px;
+}
+#f30{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 323px;
+        margin-top: 483px;
+        height: 47px;
+        width: 47px;
+}
+#f31{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 268px;
+        margin-top: 428px;
+        height: 47px;
+        width: 47px;
+}
+#f32{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 214px;
+        margin-top: 428px;
+        height: 47px;
+        width: 47px;
+}
+#f33{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 161px;
+        margin-top: 428px;
+        height: 47px;
+        width: 47px;
+}
+#f34{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 108px;
+        margin-top: 428px;
+        height: 47px;
+        width: 47px;
+}
+#f35{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 54px;
+        margin-top: 428px;
+        height: 47px;
+        width: 47px;
+}
+#f36{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 2px;
+        margin-top: 428px;
+        height: 47px;
+        width: 47px;
+}
+#f37{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 2px;
+        margin-top: 377px;
+        height: 47px;
+        width: 47px;
+}
+#f38{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 2px;
+        margin-top: 327px;
+        height: 47px;
+        width: 47px;
+}
+#f39{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 54px;
+        margin-top: 327px;
+        height: 47px;
+        width: 47px;
+}
+#f40{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 108px;
+        margin-top: 327px;
+        height: 47px;
+        width: 47px;
+}
+#f41{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 161px;
+        margin-top: 327px;
+        height: 47px;
+        width: 47px;
+}
+#f42{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 214px;
+        margin-top: 327px;
+        height: 47px;
+        width: 47px;
+}
+#f43{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 268px;
+        margin-top: 327px;
+        height: 47px;
+        width: 47px;
+}
+#f44{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 323px;
+        margin-top: 270px;
+        height: 47px;
+        width: 47px;
+}
+#f45{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 323px;
+        margin-top: 217px;
+        height: 47px;
+        width: 47px;
+}
+#f46{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 323px;
+        margin-top: 164px;
+        height: 47px;
+        width: 47px;
+}
+#f47{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 323px;
+        margin-top: 110px;
+        height: 47px;
+        width: 47px;
+}
+#f48{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 323px;
+        margin-top: 58px;
+        height: 47px;
+        width: 47px;
+}
+#f49{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 323px;
+        margin-top: 5px;
+        height: 47px;
+        width: 47px;
+}
+#f1001{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 586px;
+        margin-top: 110px;
+        height: 47px;
+        width: 47px;
+}
+#f1002{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 640px;
+        margin-top: 110px;
+        height: 47px;
+        width: 47px;
+}
+#f1003{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 586px;
+        margin-top: 164px;
+        height: 47px;
+        width: 47px;
+}
+#f1004{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 640px;
+        margin-top: 164px;
+        height: 47px;
+        width: 47px;
+}
+#f2001{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 586px;
+        margin-top: 588px;
+        height: 47px;
+        width: 47px;
+}
+#f2002{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 639px;
+        margin-top: 588px;
+        height: 47px;
+        width: 47px;
+}
+#f2003{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 586px;
+        margin-top: 642px;
+        height: 47px;
+        width: 47px;
+}
+#f2004{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 639px;
+        margin-top: 642px;
+        height: 47px;
+        width: 47px;
+}
+#f3001{
+       	position: absolute;
+       	padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 110px;
+        margin-top: 588px;
+        height: 47px;
+        width: 47px;
+}
+#f3002{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;	
+        margin-left: 163px;
+        margin-top: 588px;
+        height: 47px;
+        width: 47px;
+}
+#f3003{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 110px;
+        margin-top: 641px;
+        height: 47px;
+        width: 47px;
+}
+#f3004{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 163px;
+        margin-top: 641px;
+        height: 47px;
+        width: 47px;
+}
+#f4001{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 110px;
+        margin-top: 110px;
+        height: 47px;
+        width: 47px;
+}
+#f4002{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 163px;
+        margin-top: 110px;
+        height: 47px;
+        width: 47px;
+}
+#f4003{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 110px;
+        margin-top: 164px;
+        height: 47px;
+        width: 47px;
+}
+#f4004{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 163px;
+        margin-top: 164px;
+        height: 47px;
+        width: 47px;
+}
+#f101{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 378px;
+        margin-top: 60px;
+        height: 47px;
+        width: 47px;
+}
+#f102{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 378px;
+        margin-top: 115px;
+        height: 47px;
+        width: 47px;
+}
+#f103{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 378px;
+        margin-top: 165px;
+        height: 47px;
+        width: 47px;
+}
+#f104{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 378px;
+        margin-top: 220px;
+        height: 47px;
+        width: 47px;
+}
+#f105{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 378px;
+        margin-top: 270px;
+        height: 47px;
+        width: 47px;
+}
+#f201{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 695px;
+        margin-top: 378px;
+        height: 47px;
+        width: 47px;
+}
+#f202{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 642px;
+        margin-top: 378px;
+        height: 47px;
+        width: 47px;
+}
+#f203{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 588px;
+        margin-top: 378px;
+        height: 47px;
+        width: 47px;
+}
+#f204{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 535px;
+        margin-top: 378px;
+        height: 47px;
+        width: 47px;
+}
+#f205{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 483px;
+        margin-top: 378px;
+        height: 47px;
+        width: 47px;
+}
+#f301{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 378px;
+        margin-top: 697px;
+        height: 47px;
+        width: 47px;
+}
+#f302{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 378px;
+        margin-top: 645px;
+        height: 47px;
+        width: 47px;
+}
+#f303{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 378px;
+        margin-top: 590px;
+        height: 47px;
+        width: 47px;
+}
+#f304{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 378px;
+        margin-top: 538px;
+        height: 47px;
+        width: 47px;
+}
+#f305{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 378px;
+        margin-top: 485px;
+        height: 47px;
+        width: 47px;
+}
+#f401{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 58px;
+        margin-top: 380px;
+        height: 47px;
+        width: 47px;
+}
+#f402{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 110px;
+        margin-top: 380px;
+        height: 47px;
+        width: 47px;
+}
+#f403{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 162px;
+        margin-top: 380px;
+        height: 47px;
+        width: 47px;
+}
+#f404{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 215px;
+        margin-top: 380px;
+        height: 47px;
+        width: 47px;
+}
+#f405{
+        position: absolute;
+        padding-top: 8px;
+		padding-left: 3px;
+        margin-left: 270px;
+        margin-top: 380px;
+        height: 47px;
+        width: 47px;
+}
+
+#name_red {
+		position: absolute;
+		margin-left: 14px;
+		margin-top: 296px;
+}
+
+#name_green {
+		position: absolute;
+		margin-left: 489px;
+		margin-top: 296px;
+}
+
+#name_yellow {
+		position: absolute;
+		margin-left: 489px;
+		margin-top: 773px;
+}
+
+#name_blue {
+		position: absolute;
+		margin-left: 14px;
+		margin-top: 773px;
+}
+#color{
+		margin-top: 110px;
+		margin-left: 150px;
+}
+#logo {
+		position: absolute;
+		margin-left: -20px;
+		margin-top: -128px;
+		height: 130px;
+		width: 270px;
+		background-image:url(logo.jpeg);
+		background-size: 100%;
+}
+#container {
+		margin-top: 120px;
+}
+#centerFieldRed {
+		position: absolute;
+		margin-top: 394px;
+		margin-left: 340px;
+		width: 20px;
+		height: 20px;
+}
+#centerFieldGreen {
+		position: absolute;
+		margin-top: 351px;
+		margin-left: 388px;
+		width: 20px;
+		height: 20px;
+}
+#centerFieldYellow {
+		position: absolute;
+		margin-top: 394px;
+		margin-left: 435px;
+		width: 20px;
+		height: 20px;
+}
+#centerFieldBlue {
+		position: absolute;
+		margin-top: 434px;
+		margin-left: 388px;
+		width: 20px;
+		height: 20px;
+}
